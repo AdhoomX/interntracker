@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="author" content="Adham Ahmed">
+  <meta name="description" content="this is my first web page">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>my first web page</title>
+  <link rel="icon" href="images/website icon.jpg" type="image/jpg">
+  <link rel="stylesheet" href="main.css" type="text/css">
+  <script src="main.js" defer></script>
+</head>
+
+<body>
+  <header>
+    <div class="logo">
+      <img src="images/logo.jpg" alt="Inter Tracker Logo" width="300" height="300">
+      <h1>Intern<span class="track">Tracker</span></h1>
+    </div>
+    <nav>
+      <ul>
+        <li><a href="about.html">About</a></li>
+      </ul>
+    </nav>
+    <div class="quote-crop">
+      <img src="images/career.jpg" alt="career searching" class="hero-image" width="151" height="151">
+    </div>
+  </header>
+  <main class="container">
+    <hr>
+    <section class="intro">
+      <h2>Track You Intership Journey</h2>
+      <p>
+        You can organize the applications and monitor your progress
+      </p>
+    </section>
+    <div>
+      <section>
+        <p>Total Applications:<span id="total-count">0</span></p>
+        <p>Interviews:<span id="interview-count">0</span></p>
+        <p>Accepted:<span id="accepted-count">0</span></p>
+      </section>
+    </div>
+    <h2>Add an application</h2>
+    <section title="Add an application form">
+      <form id="Application-form">
+        <div class="app-form">
+          <label for="company">Company name</label> <input type="text" id="company" name="company"
+            placeholder="Enter company name:" required>
+          <label for="position">position </label> <input type="text" id="position" name="position"
+            placeholder="position:" required>
+          <label for="Application-date">Application date </label> <input type="date" id="Application-date"
+            name="Application date" placeholder="Application date:" required>
+          <label for="status">Status </label> <select id="status" name="status" required>
+            <option value="applied">Applied</option>
+            <option value="interview">Interview</option>
+            <option value="accepted">Accepted</option>
+            <option value="rejected">Rejected</option>
+          </select>
+          <fieldset>
+            <legend><strong>Work Type</strong></legend>
+
+            <label><input type="radio" name="work-type" value="remote" required>Remote</label>
+            <label><input type="radio" name="work-type" value="hybride" required>Hybride</label>
+            <label><input type="radio" name="work-type" value="on-site" required>On-site</label>
+          </fieldset>
+          <label for="Follow-up">Follow-up needed </label> <input type="checkbox" id="Follow-up" name="Follow-up needed"
+            placeholder="follow-up needed">
+          <div>
+            <label for="notes">Notes</label>
+            <textarea id="notes" placeholder="Add any notes" rows="4"></textarea>
+          </div>
+          <button type="submit">Add Application</button>
+        </div>
+      </form>
+    </section>
+    <hr>
+    <section class="my-app">
+      <h2>My Applications.</h2>
+      <div>
+        <label><input type="search">Search by Company</label>
+      </div>
+      <label class="filter" for="filter">filter </label> <select id="filter" name="filter">
+        <option value="All">All</option>
+        <option value="applied">Applied</option>
+        <option value="interview">Interview</option>
+        <option value="accepted">Accepted</option>
+        <option value="rejected">Rejected</option>
+      </select>
+
+      <table id="search">
+        <thead>
+          <tr>
+            <th>Company</th>
+            <th>Position</th>
+            <th>Date</th>
+            <th>Status</th>
+            <th>Work Type</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="applications-body"></tbody>
+      </table>
+    </section>
+  </main>
+
+  <hr>
+  <footer>&lt;&lt;&lt;<a href="about.html"> &copy; Adham Ahmed</a> &gt;&gt;&gt;</footer>
+</body>
+
+
+</html>
