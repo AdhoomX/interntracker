@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 // for forms
 const form = document.getElementById("Application-form");
 const companyInput = document.getElementById("company");
@@ -16,8 +16,23 @@ const searchInput = document.querySelector('.my-app input[type="search"]');
 const filterInput = document.getElementById("filter");
 const STORAGE_KEY = "interntracker-applications";
 let applications = [];
-console.log(form, companyInput, tableBody);
+console.log(form, companyInput,positionInput,statusInput,notesInput, tableBody);
 
+class Application {
+    constructor(company, position, date, status, workType, followUp,notes){
+        this.id = crypto.randomUUID();
+        this.company=company;
+        this.position=position;
+        this.date=date;
+        this.status=status;
+        this.workType=workType;
+        this.followUp=followUp;
+        this.notes=notes;
+    }
+    getSummary(){
+        returnd`${this.position} at ${this.company}`;
+    }
+}
 form.addEventListener("submit", function (event) {
     event.preventDefault();
     const company = companyInput.value.trim();
@@ -39,18 +54,20 @@ form.addEventListener("submit", function (event) {
         alert("please fill in the company ,position, and date.");
         return;
     };
-    const application = {
-        id: crypto.randomUUID,
-        company: company,
-        position: position,
-        date: date,
-        status: status,
-        workType: selectedWorkType.value,
-        followUp: followUp,
-        notes: notes
-    };
+    const application = new Application(
+        company,
+        position,
+        date,
+        status,
+        workType,
+        followUp,
+        notes,
+    );
     applications.push(application);
     console.log(applications);
+    saveApplications();
+    searchInput.value = "";
+    filterInput.value = "All";
     renderApplications();
     form.reset();
 });
@@ -117,6 +134,73 @@ function deleteApplication(id) {
     applications = applications.filter(function (application) {
         return application.id !== id;
     });
-
+    saveApplications();
     renderApplications();
 }
+function saveApplications() {
+    try {
+        const data = JSON.stringify(applications);
+        localStorage.setItem(STORAGE_KEY, data);
+    } catch (error) {
+        console.error("saving failed", error);
+        alert("your changes could not be saved.");
+    }
+}
+function loadApplications() { //using try and catch to save and load applications
+    try {
+        const data = localStorage.getItem(STORAGE_KEY);
+        if (data === null) {
+            return [];
+        }
+        const parsed = JSON.parse(data);
+        const valid = Array.isArray(parsed) && parsed.every(function (item) {
+            return (
+                item !== null &&
+                typeof item === "object" &&
+                typeof item.id === "string" &&
+                typeof item.company === "string" &&
+                typeof item.position === "string" &&
+                typeof item.date === "string" &&
+                typeof item.status === "string" &&
+                typeof item.workType === "string"
+            );
+        });
+        if (!valid) {
+            throw new Error("Invalid saved applications.");
+        }
+        return parsed;
+    } catch (error) {
+        console.error("Loading failed:", error);
+        alert("Saved applications could not be loaded.");
+        return [];
+    }
+};
+applications = loadApplications();
+renderApplications();
+const tipText = document.getElementById("career-tip");
+const tipButton = document.getElementById("tip-button");
+async function loadCareerTip(){
+    tipButton.disabled = true;
+    try{
+        const response = await fetch("./tips.json");
+        if(!response.ok){
+            throw new Error(`Request failed: ${response.status}`);
+        }
+        const tips = await response.json();
+        if (
+            !Array.isArray(tips)||
+            tips.length===0 ||
+            !tips.every(tip => typeof tip ==="string")
+        ){
+            throw new Error("Invalid tips data");
+        }
+        const index = Math.floor(Math.random() * tips.length);
+        tipText.textContent = tips[index];
+    } catch (error) {
+        console.error("Could not load tips:", error);
+        tipText.textContent = "Could not load a tip. Please try again.";
+    } finally {
+        tipButton.disabled = false;
+    }   
+}
+tipButton.addEventListener("click", loadCareerTip);
